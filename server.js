@@ -23,6 +23,9 @@ app.use(cors({
 const swaggerDocument = require('./swagger.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// root redirect to api docs
+app.get('/', (req, res) => res.redirect('/api-docs'));
+
 // api routes
 app.use('/accounts', require('./accounts'));
 
