@@ -1,0 +1,287 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Node.js Sign-up and Verification API",
+    "description": "Node.js + MySQL - API with email sign-up, verification, authentication and forgot password",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/accounts/authenticate": {
+      "post": {
+        "summary": "Authenticate account credentials and return a JWT token and a cookie with a refresh token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "user@example.com" },
+                  "password": { "type": "string", "example": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Account authenticated successfully" },
+          "400": { "description": "Email or password is incorrect" }
+        }
+      }
+    },
+    "/accounts/refresh-token": {
+      "post": {
+        "summary": "Use a refresh token to generate a new JWT token and a new refresh token",
+        "responses": {
+          "200": { "description": "Tokens refreshed successfully" },
+          "401": { "description": "Invalid token" }
+        }
+      }
+    },
+    "/accounts/revoke-token": {
+      "post": {
+        "summary": "Revoke a refresh token",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Token revoked" },
+          "400": { "description": "Token is required" }
+        }
+      }
+    },
+    "/accounts/register": {
+      "post": {
+        "summary": "Register a new user account and send a verification email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "firstName", "lastName", "email", "password", "confirmPassword", "acceptTerms"],
+                "properties": {
+                  "title": { "type": "string", "example": "Mr" },
+                  "firstName": { "type": "string", "example": "John" },
+                  "lastName": { "type": "string", "example": "Doe" },
+                  "email": { "type": "string", "example": "user@example.com" },
+                  "password": { "type": "string", "example": "password" },
+                  "confirmPassword": { "type": "string", "example": "password" },
+                  "acceptTerms": { "type": "boolean", "example": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Registration successful" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/accounts/verify-email": {
+      "post": {
+        "summary": "Verify a new account with a verification token received by email after registration",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token"],
+                "properties": {
+                  "token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Verification successful" },
+          "400": { "description": "Verification failed" }
+        }
+      }
+    },
+    "/accounts/forgot-password": {
+      "post": {
+        "summary": "Submit email address to reset the password on an account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": { "type": "string", "example": "user@example.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Please check your email for password reset instructions" }
+        }
+      }
+    },
+    "/accounts/validate-reset-token": {
+      "post": {
+        "summary": "Validate the reset password token received by email after submitting to the /accounts/forgot-password route",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token"],
+                "properties": {
+                  "token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Token is valid" },
+          "400": { "description": "Invalid token" }
+        }
+      }
+    },
+    "/accounts/reset-password": {
+      "post": {
+        "summary": "Reset the password for an account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token", "password", "confirmPassword"],
+                "properties": {
+                  "token": { "type": "string" },
+                  "password": { "type": "string" },
+                  "confirmPassword": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Password reset successful" },
+          "400": { "description": "Invalid token" }
+        }
+      }
+    },
+    "/accounts": {
+      "get": {
+        "summary": "Get a list of all accounts (admin only)",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "List of accounts" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "post": {
+        "summary": "Create a new account (admin only)",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "firstName", "lastName", "email", "password", "confirmPassword", "role"],
+                "properties": {
+                  "title": { "type": "string" },
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "confirmPassword": { "type": "string" },
+                  "role": { "type": "string", "enum": ["Admin", "User"] }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Account created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/accounts/{id}": {
+      "get": {
+        "summary": "Get a single account by id",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Account details" },
+          "401": { "description": "Unauthorized" },
+          "404": { "description": "Account not found" }
+        }
+      },
+      "put": {
+        "summary": "Update an account",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "confirmPassword": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Account updated" },
+          "400": { "description": "Validation error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete an account",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }],
+        "responses": {
+          "200": { "description": "Account deleted successfully" },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
