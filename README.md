@@ -21,7 +21,7 @@ Node.js REST API with email sign-up, verification, authentication and forgot pas
 - MySQL with Sequelize ORM
 - JSON Web Tokens (jsonwebtoken)
 - bcryptjs for password hashing
-- Nodemailer + Resend for emails
+- Nodemailer + Mailtrap for emails
 - Swagger UI for API docs
 
 ## Project Structure
