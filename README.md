@@ -2,7 +2,7 @@
 
 Node.js REST API with email sign-up, verification, authentication and forgot password.
 
-**Live API:** https://node-mysql-api-0foa.onrender.com/api-docs
+**Live API:** https://node-mysql-api-0foa.onrender.com
 **API Docs:** https://node-mysql-api-0foa.onrender.com/api-docs
 **Frontend:** https://angular21-auth-boilerplate-bt8r.onrender.com
 
@@ -64,6 +64,7 @@ Node.js REST API with email sign-up, verification, authentication and forgot pas
 Copy `.env.example` to `.env` and fill in your values:
 
 ```bash
+cp .env.example .env
 npm install
 npm start
 ```
@@ -75,11 +76,13 @@ Runs on `http://localhost:4000`.
 | Variable | Description |
 |----------|-------------|
 | `DB_HOST` | MySQL host |
+| `DB_PORT` | MySQL port (default `3306`) |
 | `DB_USER` | MySQL username |
 | `DB_PASSWORD` | MySQL password |
 | `DB_DATABASE` | MySQL database name |
 | `JWT_SECRET` | Secret key for signing JWTs |
 | `SMTP_HOST` | SMTP server host |
+| `SMTP_PORT` | SMTP server port |
 | `SMTP_USER` | SMTP username |
 | `SMTP_PASS` | SMTP password / API key |
 | `EMAIL_FROM` | From address for emails |
