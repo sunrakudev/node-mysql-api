@@ -2,7 +2,7 @@
 
 Node.js REST API with email sign-up, verification, authentication and forgot password.
 
-**Live API:** https://angular21-auth-boilerplate-bt8r.onrender.com
+**Live API:** https://node-mysql-api-0foa.onrender.com/api-docs
 **API Docs:** https://node-mysql-api-0foa.onrender.com/api-docs  
 **Frontend:** https://angular21-auth-boilerplate-bt8r.onrender.com
 
