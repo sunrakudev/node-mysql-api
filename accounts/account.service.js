@@ -110,15 +110,17 @@ async function forgotPassword({ email }, origin) {
     account.resetTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
     await account.save();
 
-    await sendPasswordResetEmail(account, origin);
+    await sendPasswordResetEmail(account, origin || process.env.CORS_ORIGIN);
 }
 
 async function validateResetToken({ token }) {
     const account = await db.Account.findOne({
-        where: { resetToken: token }
+        where: {
+            resetToken: token,
+            resetTokenExpires: { [db.Op.gt]: new Date() }
+        }
     });
-    if (!account || new Date() > new Date(account.resetTokenExpires))
-        throw 'Invalid token';
+    if (!account) throw 'Invalid token';
     return account;
 }
 
